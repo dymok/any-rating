@@ -1,7 +1,6 @@
 <?php
-/**
- * Simple rating example
- */
+use AnyRating\Rating\SingleRating as SingleRating;
+use AnyRating\Rating\RatingPart as RatingPart;
 
 include('lib/AnyRating.php');
 
@@ -9,9 +8,20 @@ $anyRating = new AnyRating();
 $anyRating->init();
 
 $rating = new AnyRating\Rating();
-$rating->addSingleRating(1);
-$rating->addSingleRating(2);
-$rating->addSingleRating(3);
+
+$singleRating = new SingleRating();
+
+$singleRating->addRatingPart(new RatingPart('deadline', 'Deadline', 4));
+$singleRating->addRatingPart(new RatingPart('communication', 'Communication', 6));
+
+$rating->addSingleRating($singleRating);
+
+$singleRating = new SingleRating();
+
+$singleRating->addRatingPart(new RatingPart('deadline', 'Deadline', 5));
+$singleRating->addRatingPart(new RatingPart('communication', 'Communication', 5));
+
+$rating->addSingleRating($singleRating);
 
 echo $rating->getValue();
 echo "\n\n";

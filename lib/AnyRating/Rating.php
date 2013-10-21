@@ -23,17 +23,18 @@ class Rating {
         $this->singleRatings = $ratings;
     }
 
-    public function addSingleRating($rating) {
-        $intRating = (int)$rating;
-        if ($intRating >= 1 && $intRating <= 5) {
-            $this->singleRatings[] = $intRating;
-        }
+    public function addSingleRating(Rating\SingleRating $rating) {
+        $this->singleRatings[] = $rating;
     }
 
     public function getValue() {
         if ($this->value === null) {
             if (!empty($this->singleRatings)) {
-                $this->value = array_sum($this->singleRatings) / count($this->singleRatings);
+                $sum = 0;
+                foreach ($this->singleRatings as $r) {
+                    $sum += $r->getValue();
+                }
+                $this->value = $sum / count($this->singleRatings);
             }
         }
         return $this->value;
@@ -43,7 +44,7 @@ class Rating {
         if ($this->wilsonScoreLower === null) {
             $count = array(1 => 0, 0, 0, 0, 0);
             foreach ($this->singleRatings as $r) {
-                $count[$r] += 1;
+                $count[ceil($r->getValue())] += 1;
             }
 
             $sum = 0 ;
